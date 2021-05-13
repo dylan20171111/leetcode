@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int hIndex(vector<int>& ci) {
+        int left = 0, right = ci.size();
+		while(left < right) {
+			int mid = left + (right - left) / 2;
+			if(ci[mid] == ci.size() - mid)
+				return ci[mid];
+			else if(ci[mid] < ci.size() - mid)
+				left = mid + 1;
+			else
+				right = mid;
+		}
+		return ci.size() - left;
+    }
+};
