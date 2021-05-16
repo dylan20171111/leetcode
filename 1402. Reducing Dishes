@@ -1,0 +1,23 @@
+class Solution
+{
+public:
+    int maxSatisfaction(vector<int>& satisfaction) 
+    {
+        vector<int> & a = satisfaction;
+        sort(a.rbegin(), a.rend());
+        int res = 0;
+        int presum = 0;
+        for (int & x : a)
+        {
+            if (presum + x > 0)
+            {
+                presum += x;
+                res += presum;
+            }
+            else
+                break;
+        }
+
+        return res;
+    }
+}; 
