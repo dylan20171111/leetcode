@@ -1,0 +1,23 @@
+class Solution {
+public:
+	vector<int> diffWaysToCompute(string input) {
+		vector<int> re;
+         if(!input.size()) return re;
+		for (int i = 0; i < input.size(); ++i) {
+			if (!isdigit(input[i])) {
+				vector<int> left = diffWaysToCompute(input.substr(0, i));
+				vector<int> right = diffWaysToCompute(input.substr(i+1));
+				for (auto m : left) {
+					for (auto n : right) {
+						if ('+' == input[i]) re.push_back(m + n);
+						else if ('-' == input[i]) re.push_back(m - n);
+						else if ('*' == input[i])  re.push_back(m * n);
+						else  re.push_back(m / n);
+					}
+				}
+			}
+		}
+		if (re.empty()) re.push_back(stoi(input));
+		return re;
+	}
+};
