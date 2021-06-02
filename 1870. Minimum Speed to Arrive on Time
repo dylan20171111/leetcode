@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int minSpeedOnTime(vector<int>& dist, double hour) {
+        if (hour < dist.size() - 1)
+            return -1;
+        
+        int l = 0, r = 10e7;
+        while (l < r) {
+            double mid = (l + r) / 2;
+            double time = 0;
+            for (int i : dist) {
+                time = ceil(time);
+                time += i / mid;   
+            }
+            if (time > hour)
+                l = mid + 1;
+            else
+                r = mid;
+        }
+        return l;
+    }
+};
