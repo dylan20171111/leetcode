@@ -1,0 +1,20 @@
+#define F(x,y) for(int x = 0 ; x < y ; x++)
+
+const int d_size = 1<<10;
+
+class Solution {
+public:
+    int digit[d_size];
+    int longestAwesome(string s) {
+        F(i,d_size) digit[i] = -2;
+        digit[0] = -1;
+        int temp = 0, ans = 0;
+        for(int i = 0 ; s[i] ; i++){
+            temp ^= (1<<(s[i] - '0'));
+            if (digit[temp] == -2) digit[temp] = i;
+            ans = max(ans, i - digit[temp]);
+            F(j,10) if (digit[temp^(1<<j)] != -2) ans = max(ans, i - digit[temp^(1<<j)]);
+        }
+        return ans;
+    }
+};
