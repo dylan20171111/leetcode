@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int kthSmallest(vector<vector<int>>& mat, int k) {
+        int n = mat.size(), m = mat[0].size();
+        vector<int> a;
+        
+        a.emplace_back(0);
+        for (int i = 0; i < n; i++) {
+            vector<int> b;
+            for (int j = 0; j < k && j < a.size(); j++) {
+                for (int l = 0; l < m; l++)
+                    b.push_back(a[j] + mat[i][l]);
+            }
+            sort(b.begin(), b.end());
+            a = b;
+        }
+        
+        return a[k-1];
+    }
+};
