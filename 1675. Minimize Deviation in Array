@@ -1,0 +1,26 @@
+class Solution {
+public:
+    auto minimumDeviation(vector<int>& nums) const -> int
+    {
+        for (int& x : nums)
+            x *= (x % 2) + 1;
+
+        const auto [minIt, maxIt] = minmax_element(cbegin(nums), cend(nums));
+        int minVal = *minIt
+		int result = *maxIt - minVal;
+        priority_queue<int> heap(less<int>(), move(nums));
+
+        while (heap.top() % 2 == 0) {
+            const int newVal = heap.top() / 2;
+			const int newMin = min(minVal, newVal);
+            heap.pop();
+            heap.push(newVal);
+            if (result >= heap.top() - newMin) {
+                minVal = newMin;
+                result = heap.top() - newMin;
+            }
+        }
+
+        return result;
+    }
+};
