@@ -1,0 +1,14 @@
+class Solution {
+public:
+    int mctFromLeafValues(vector<int>& a) {
+        int i = 0, ret = 0;
+        for (auto &x : a) {
+            while (i && a[i - 1] < x) 
+                ret += a[--i] * ((i && a[i - 1] < x) ? a[i - 1] : x);
+            a[i++] = x;
+        }
+        while (i > 1)  
+            ret += a[--i] * a[i - 1];
+        return ret;
+    }
+};
