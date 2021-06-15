@@ -1,0 +1,44 @@
+	class Solution {
+	public:
+		int maxSumMinProduct(vector<int>& nums) {
+		int n = nums.size(), left[n], right[n]; //left[n] and right[n] to store the number of elements to the left and to the right from current elment are greater or equal to current element
+		long prefixSum[n], res = 0;
+		fill_n(prefixSum, n, 0);
+		fill_n(left, n, 0);
+		fill_n(right, n, 0);
+		prefixSum[0] = nums[0];
+		for (int i = 1; i < n; ++i) {
+			prefixSum[i] = prefixSum[i-1] + nums[i];
+		}
+    
+		stack<pair<int,int>> st;
+		
+		for (int i = 0; i < n; ++i) {
+			int cnt = 1; //counting the number of elements; intial value is 1 (itself is equal to the current element)
+			while(!st.empty() && st.top().first >= nums[i]) { //keep checking if the top of stack is greater than current elment
+				cnt += st.top().second;
+				st.pop();
+			}
+			st.push({nums[i], cnt});
+			left[i] = cnt;
+		}
+		
+		stack<pair<int,int>> sta;
+		for (int i = n-1; i >= 0; --i) {
+			int cnt = 1;
+			while(!sta.empty() && sta.top().first >= nums[i]) {
+				cnt += sta.top().second;
+				sta.pop();
+			}
+			sta.push({nums[i], cnt});
+			right[i] = cnt;
+		}
+		
+		for (int i = 0; i < n; ++i) {
+			int a = i-left[i]+1, b = i+right[i]-1; //get the right index to calculate sum between a and b
+			res = max(res, ((prefixSum[b] - prefixSum[a] + nums[a]) * nums[i]));
+		}
+		
+		return res%(1000000007);
+	}
+};
