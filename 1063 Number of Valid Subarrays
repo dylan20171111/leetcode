@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int validSubarrays(vector<int>& nums) {
+        stack<int> stk;
+        int count = 0;
+        for (const auto num : nums) {
+            while (!stk.empty() && num < stk.top()) {
+                stk.pop();
+            }
+            stk.push(num);
+            count += stk.size();
+        }
+        return count;
+    }
+};
