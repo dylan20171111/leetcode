@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int minOperations(vector<int>& n1, vector<int>& n2) {        
+        int m = n1.size(), n = n2.size();
+        if(m > 6 * n || n > 6 * m) return -1;
+                       
+        vector<int>c1(6), c2(6);
+        int sum1 = 0, sum2 = 0;
+        for(auto x : n1) c1[x-1]++, sum1 += x;
+        for(auto x : n2) c2[x-1]++, sum2 += x;
+
+        if(sum1 == sum2) return 0;
+        else if(sum1 < sum2){
+            swap(c1, c2);
+        }
+
+        int res = 0;
+        int g = abs(sum1 - sum2);
+        for(int gap = 5; gap >= 1 && g > 0; gap--){
+            int change = min(g / gap, c1[gap] + c2[5 - gap]);
+            g -= change * gap;
+            res += change;
+        }
+        if(g > 0) res += g;
+        return res;
+    }
+};
