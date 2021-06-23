@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int countTriplet(vector<int>& nums1, vector<int>& nums2) {
+        int count = 0, left, right;
+        long num1Val, num2Val;
+        unordered_map<int, int> freq;
+        
+        for(int i = 0; i < nums2.size(); i++) freq[nums2[i]]++;
+        
+        for(int i = 0; i < nums1.size(); i++) {
+            left = 0;
+            right = nums2.size()-1;
+            num1Val = (long)nums1[i] * nums1[i];
+            while(left < right) {
+                num2Val = (long)nums2[left] * nums2[right];
+                if(num1Val == num2Val) {
+                    if(nums2[right] == nums2[left]) {
+                        count += (freq[nums2[right]] * (freq[nums2[right]]-1))/2;
+                        break;
+                    }
+                    count += freq[nums2[right]] * freq[nums2[left]];
+                    left  += freq[nums2[left]];
+                    right -= freq[nums2[right]];
+                } else if(num1Val > num2Val) {
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+        }
+        return count;
+    }
+    
+    int numTriplets(vector<int>& nums1, vector<int>& nums2) {
+        sort(nums1.begin(), nums1.end());
+        sort(nums2.begin(), nums2.end());
+        return countTriplet(nums1, nums2) + countTriplet(nums2, nums1);
+    }
+};
