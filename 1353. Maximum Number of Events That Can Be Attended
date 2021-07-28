@@ -1,0 +1,51 @@
+class Solution {
+public:
+    
+    struct comp
+    {
+        bool operator()(vector<int>& a,vector<int> b)
+        {
+            if(a[1]!=b[1])
+            {
+                return a[1]>b[1];
+            }
+            
+            return a[0]>b[0]; 
+        }
+    };
+    
+    int maxEvents(vector<vector<int>>& events) 
+    {
+        unordered_map<int,vector<vector<int>>> ma;
+        int i,j,k,maxDay = -1,ans = 0;
+        
+        for(auto event:events)
+        {
+            ma[event[0]].push_back(event);
+            maxDay = max(maxDay,event[1]);
+        }
+        
+        priority_queue<vector<int>,vector<vector<int>>,comp> pq;
+        
+        for(i=1;i<=maxDay;i++)
+        {
+            for(auto it = ma[i].begin();it!=ma[i].end();it++)
+            {
+                pq.push(*it);
+            }
+            
+            while(!pq.empty() && pq.top()[1]<i)
+            {
+                pq.pop();
+            }
+            
+            if(!pq.empty())
+            {
+                ans++;
+                pq.pop();
+            }
+        }
+        
+        return ans;
+    }
+};
