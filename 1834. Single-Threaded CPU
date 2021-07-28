@@ -1,0 +1,38 @@
+class Solution {
+public:
+  class myCompactor {
+    public:
+      bool operator () (const vector<int>& a, const vector<int>& b) const {
+         if (a[1]==b[1])
+             return a[2]>b[2];
+         else 
+             return a[1]>b[1];
+      }
+  };   
+    vector<int> getOrder(vector<vector<int>>& tasks) {
+        int j = 0, n = tasks.size();
+  vector<vector<int>> arr;
+  for (int j = 0; j<n; j++)
+      arr.push_back({tasks[j][0],tasks[j][1],j});
+      
+  sort(arr.begin(),arr.end(),
+       [this] (const vector<int>& a, const vector<int>& b) {return a[0]<b[0];});  
+        
+  long t = arr.front()[0];
+  vector<int> ans;
+  priority_queue<vector<int>,vector<vector<int>>,myCompactor>heap;
+  while (ans.size()<n) {
+    while (j<n && t>=arr[j][0])
+        heap.push(arr[j++]);
+    if (!heap.empty()) {
+      ans.push_back(heap.top()[2]);
+      t+=heap.top()[1];
+      heap.pop();  
+    }
+    else if (j<n) // cases when [100,100], [10000,10000] 
+        t = arr[j][0];
+        
+  }
+  return ans;
+    }
+};
