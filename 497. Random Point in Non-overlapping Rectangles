@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<vector<int>> data;
+    int area = 0;
+    
+    Solution(vector<vector<int>>& rects) {
+        for (auto& x : rects) {
+            area += (x[2] - x[0] + 1) * (x[3] - x[1] + 1);
+            data.push_back({area, x[0], x[2] - x[0] + 1, x[1], x[3] - x[1] + 1});
+        }
+    }
+    
+    vector<int> pick() {
+        int num = rand() % area;
+        int l = 0, r = data.size() - 1;
+        while (l < r) {
+            int m = l + (r - l) / 2;
+            if (data[m][0] < num) l = m + 1;
+            else r = m;
+        }
+        
+        if (data[l][0] == num && l != data.size() - 1) ++l;
+        
+        vector<int>& y = data[l];
+        
+        return {rand() % y[2] + y[1], rand() % y[4] + y[3]};
+    }
+};
