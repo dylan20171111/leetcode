@@ -1,0 +1,60 @@
+
+kenA7's avatar
+kenA7
+72
+May 28, 2021 3:56 AM
+
+75 VIEWS
+
+class Solution {
+public:
+    int minNumberOfFrogs(string croakOfFrogs) 
+    {
+        int free=0,onwork=0;
+        unordered_map<string,int>m;
+        for(auto a:croakOfFrogs)
+        {
+            if(a=='c')
+            {
+                if(free!=0)
+                {
+                    free--;
+                }
+                onwork++;
+                m["c"]++;
+            }
+            else if(a=='r')
+            {
+                if(m["c"]==0)
+                    return -1;
+                m["c"]--;
+                m["cr"]++;
+            }
+            else if(a=='o')
+            {
+                if(m["cr"]==0)
+                    return -1;
+                m["cr"]--;
+                m["cro"]++;
+            }
+            else if(a=='a')
+            {
+                if(m["cro"]==0)
+                    return -1;
+                m["cro"]--;
+                m["croa"]++;
+            }
+            else
+            {
+                if(m["croa"]==0)
+                    return -1;
+                m["croa"]--;
+                onwork--;
+                free++;
+            }
+        }
+        if(onwork!=0)
+            return -1;
+        return free;
+    }
+};
