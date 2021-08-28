@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int preorder = 0;
+    int searchPostOrder( vector<int> &post, int target, int low, int high) {
+        int result = low;
+        for(int i=low;i<=high;i++) {
+            if(post[i]==target) {
+                result = i;
+                break;
+            }
+        }
+        return result;
+    }
+    TreeNode* generateTree(vector<int> &pre, vector<int> &post, int low, int high) {
+        
+        if(low>high) {
+            return NULL;
+        }
+        
+        if(low==high) {
+            TreeNode *temp = new TreeNode(pre[preorder]);
+            preorder++;
+            return temp;
+        }
+        
+        TreeNode *root = new TreeNode(pre[preorder]);
+        preorder++;
+        
+        int index = searchPostOrder(post, pre[preorder], low, high-1);
+        
+        root->left = generateTree(pre, post, low, index);
+        root->right = generateTree(pre, post, index+1, high-1);
+        
+        return root;
+        
+    }
+    TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {
+        if(pre.size()==0) {
+            return NULL;
+        }
+        if(pre.size()==1) {
+            return new TreeNode(pre[0]);
+        }
+        
+        return generateTree(pre, post, 0, pre.size()-1);
+    }
+};
