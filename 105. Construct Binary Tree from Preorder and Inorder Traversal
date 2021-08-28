@@ -1,0 +1,22 @@
+class Solution {
+public:
+
+TreeNode* solve(int i1, int j1, int i2, int j2, vector<int>& pre, unordered_map<int, int>& mp){
+    if(i1 > j1){
+        return NULL;
+    }
+    TreeNode* root = new TreeNode(pre[i1], NULL, NULL);
+    int i = mp[pre[i1]];
+    root->left = solve(i1 + 1, i1 + (i - i2), i2, i -1, pre, mp);
+    root->right = solve(i1 + ( i - i2) + 1, j1, i + 1, j2, pre, mp);
+    return root;
+}
+TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+    int n_p = preorder.size(), n_i = inorder.size();
+    unordered_map<int ,int> mp;
+    for(int i = 0; i<n_i; i++){
+        mp[inorder[i]] = i;
+    }
+    return solve(0, n_p-1, 0, n_i-1, preorder, mp);
+}
+};
