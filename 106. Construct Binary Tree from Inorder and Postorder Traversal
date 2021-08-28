@@ -1,0 +1,26 @@
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        int inIndex = inorder.size() - 1, postIndex = inorder.size() - 1; 
+        
+        return buildTreeUtil(inorder, postorder, postIndex, inIndex, NULL);
+    }
+    
+     TreeNode* buildTreeUtil(vector<int>& inorder, vector<int>& postorder, int &postIndex, int &inIndex, TreeNode* postNode) {
+        
+         if (postIndex < 0)
+             return NULL;
+         
+         TreeNode *curr = new TreeNode(postorder[postIndex]);
+         
+         if (postorder[postIndex--] != inorder[inIndex])
+            curr->right = buildTreeUtil(inorder, postorder, postIndex, inIndex, curr);
+         
+         inIndex--;
+         
+         if(postNode == NULL || postNode->val != inorder[inIndex])
+             curr->left = buildTreeUtil(inorder, postorder, postIndex, inIndex, postNode);
+         
+         return curr;
+    }
+};
