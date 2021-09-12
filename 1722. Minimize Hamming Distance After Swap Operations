@@ -1,0 +1,46 @@
+class Solution {
+public:
+    vector<vector<int>> adj;  //adjacency list - undirected graph
+    vector<bool> visited;  //elements visited until now
+    vector<int> temp;  //hold the elements in 1 dfs traversal at a time i.e. 1 connected component a time
+    
+    void dfs(int i)
+    {
+        visited[i] = true;  //mark as visited
+        temp.push_back(i);   //add to current temporary vector
+        for(auto x:adj[i])
+        {
+            if(visited[x] == false)
+            {
+                dfs(x);
+            }
+        }
+    }
+    
+    int minimumHammingDistance(vector<int>& source, vector<int>& target, vector<vector<int>>& allowedSwaps) {
+        int n = source.size();
+        adj.resize(n);
+        visited.resize(n, false);
+        
+        for(auto e: allowedSwaps){
+            adj[e[0]].push_back(e[1]);
+            adj[e[1]].push_back(e[0]);
+        }
+        
+        int count = 0;
+        for(int i = 0 ; i < n ; i++){
+            temp.clear();  //clear previous dfs traversal elements
+            if (!visited[i])
+                dfs(i);
+            unordered_map<int,int> mp;
+            for(auto e: temp)
+                mp[source[e]]++;
+            for(auto e: temp){
+                if (mp[target[e]] < 1)  //if not in current dfs traversal
+                    count++;
+                mp[target[e]]--;  // if multiple occurence of same value in array
+            }
+        }
+        return count;
+    }
+};
