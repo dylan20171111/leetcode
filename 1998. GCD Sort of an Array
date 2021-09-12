@@ -1,0 +1,66 @@
+const int N = 1e5+7;
+class Solution {
+public:
+    int parent[N] , sz[N]; 
+    void make_set()
+    {
+        for( int i = 2 ; i < N ; i++ )
+        {
+            parent[ i ] =  i;
+            sz[ i ] = 1 ; 
+        }
+    }
+    
+    int find_parent( int i )
+    {
+        return ( parent[i] == i ? i : find_parent(parent[i]) );
+    }
+    
+    void union_set(int a ,int b)
+    {
+        a = find_parent(a);
+        b = find_parent(b);
+        if( a != b )
+        {
+            if( sz[a] < sz[b] ) swap(a , b);
+            sz[a] += sz[b];
+            parent[b] = a;
+            sz[b] =  1;
+        }
+    }
+    
+    bool gcdSort(vector<int>& a) 
+    {
+         bool f=  true;
+        int n = a.size();
+        make_set();
+        for(int i = 0  ; i+1 < n; i++ )
+        {
+            f &= a[i] <= a[i+1];
+        } 
+			if( f ) return f;  // if the array is already sorted return true 
+        for( int i = 0 ; i < n ; i++ )
+        {
+            for( int j = 2 ; j * j <= a[i] ; j++ )
+            {
+                if ( a[i] % j == 0 )
+                {
+				  // merging element with divisors  
+                    union_set( a[i]/j , a[i] );   
+                    union_set( j ,  a[i] ) ;
+                }
+            }
+        }
+        vector < int > temp = a;
+        sort( temp.begin()  , temp.end() );
+        for( int i =0 ; i < n ; i++ )
+        {
+           /// cout << find_parent(a[i]) << " " << find_parent(temp[i]) << endl;
+            if(find_parent(a[i]) != find_parent( temp[i]) )   // checking if both the parent of current element and element (in the sorted arrat) are same 
+            {
+                return  0;
+            }
+        }
+        return 1;
+    }
+};
